@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>A Simple App for Making Predictions</title>
+  <meta charset="utf-8">
+  <meta name="description" content="A Simple App for Making Predictions">
+  <meta name="author" content="Wayne Morris">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>A Simple App for Making Predictions</h1>
+    <h2>A Simple App for Making Predictions Using Machine Learning Algorithms</h2>
+    <p>Wayne Morris<br/>Software Engineer/Data Scientist</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Introduction</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>This app utilizes random forest, bagging, general linear models and rpart as the Machine Learning(ML) Alogrithms to choose from when making predictions. The app is very simple to use and all it requires is for the user to state the filename which contains the data, the value to be predicted and a ML algorithm to use for making the prediction. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>How to Use</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The app requires some amount of data preprocessing/cleaning before usage. For instances, the removal of NAs may be necessary before using this app. The app also assumes that the data being entered is already cleaned and contains all the required features.</p>
+
+<p>Make sure you have all the required libraries to run this app. The app uses the following libraries:
+      <ul>
+        <li>Shiny</li>
+        <li>gbm</li>
+        <li>ggplot2</li>
+        <li>Caret</li>
+        <li>MASS</li>
+        <li>Random Forest</li>
+      </ul></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>The R Code for App</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The simple version of the R code is shown below. In the actual version on <a href="http://www.github.com/wmorris75/PredictionApp">github</a>, it incorporates error handling technique for returning customized messages to the user and in cases where there is no prediction results, the output produces a table to show comparison of the actual results with the prediction results.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>The Code for App(cont)</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">get_prediction&lt;-function(path, algorithm, predictor){
+    data&lt;-read.csv(path)
+    pred_variable &lt;- gsub(&quot;\\s&quot;, &quot;.&quot;, predictor)
+    inTrain &lt;- createDataPartition(data[[pred_variable]], p=0.7, list=FALSE)
+    training&lt;-data[inTrain,]
+    testing&lt;-data[-inTrain,]
+
+    #set.seed(323)
+    nbFit&lt;-train(training[[pred_variable]] ~ ., data=training, method=algorithm)
+    nbprediction&lt;-predict(nbFit, testing)
+
+    output&lt;-confusionMatrix(nbprediction, testing[[pred_variable]])$overall[1]
+    return(output)
+}
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>App Limitations and Future Work</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>There are a number of limitations with the App. As mentioned, the app does not do any form of data preprocessing. Preprocessing has to be handled as desired by the user. This is one aspect that will be focused on improving to lessen the manual processing by the user.</p>
+
+<p>The app also will throw an error when it does not find any overlapping reference value in its prediction results. This means that the algorithm used did not produce a any matching values from the model developed by the training set with the test sets. The results of these occurrences could be attributed to a number of issues, for example, float data types which differ by decimal instead of numeric values being rounded to the nearest integer. When cases like these occur, it does not mean the app cannot predict the value but the prediction given might match closely to what would be obtained similar to a regression model. </p>
+
+<p>To improve this feature of the app, the focus would be to utilize other models, such as linear regression model, that are a better fit for events like these. Displaying statistical output to give user a better interpretation of the results will also be considered.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Introduction'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='How to Use'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='The R Code for App'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='The Code for App(cont)'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='App Limitations and Future Work'>
+         5
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
