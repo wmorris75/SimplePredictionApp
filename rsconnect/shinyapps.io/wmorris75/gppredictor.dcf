@@ -1,0 +1,10 @@
+name: gppredictor
+account: wmorris75
+server: shinyapps.io
+appId: 134158
+bundleId: 597911
+url: https://wmorris75.shinyapps.io/gppredictor/
+when: 1477539336.52484
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: data.csv|functions.R|iris.csv|test.csv
