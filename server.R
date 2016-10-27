@@ -6,14 +6,6 @@ library(gbm)
 library(ggplot2)
 library(MASS)
 library(e1071)
-data("mtcars")
-
-# We tweak the "am" field to have nicer factor labels. Since this doesn't
-# rely on any user inputs we can do this once at startup and then use the
-# value throughout the lifetime of the application
-mpgData <- mtcars
-mpgData$am <- factor(mpgData$am, labels = c("Automatic", "Manual"))
-
 
 build_formula<-function(value_to_predict, input_vector){
   vector<-get_feature_entry(input_vector)
@@ -166,16 +158,6 @@ shinyServer(
         prediction<-predict(model, testing)
         out<-predict(model, f_value)
         isolate(paste("Result is: ", out))
-        # out<-{get_prediction(df, input$method, input$predictor, inTrain, option, features)}
-        # if(is.numeric(out)){
-        #   isolate(paste("Result is: ", out))
-        # }
-        # else if(is.character(out)){
-        #   isolate(paste("ERROR ----> ", out))
-        # }
-        # else if(is.table(out)){
-        #   isolate(paste("TABLE ----> ", out))
-        # }
       }
     })
     
